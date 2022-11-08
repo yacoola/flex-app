@@ -21,7 +21,7 @@
     <script>
       function init() {
         new URL(window.location.href).searchParams.forEach((x, y) => {
-          if (y === "apikey") document.getElementById("key").value = x;
+          if (y === "key") document.getElementById("key").value = x;
         });
 
         if (navigator.geolocation) {
