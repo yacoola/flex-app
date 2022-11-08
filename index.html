@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flex Flex Flex Flex Flex</title>
   </head>
-  <body onload="getLocation()">
+  <body onload="init()">
     <form method="post">
       <p id="messages"></p>
       <input id="lat" name="latitude" placeholder="latitude" readonly />
@@ -19,7 +19,11 @@
     </form>
 
     <script>
-      function getLocation() {
+      function init() {
+        new URL(window.location.href).searchParams.forEach((x, y) => {
+          if (y === "apikey") document.getElementById("key").value = x;
+        });
+
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((pos) => {
             document.getElementById("lat").value = pos.coords.latitude;
