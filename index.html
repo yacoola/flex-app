@@ -23,11 +23,11 @@
   <body onload="init()">
     <form method="post">
       <p id="messages"></p>
-      <input id="lat" name="latitude" placeholder="latitude" readonly />
-      <input id="lon" name="longitude" placeholder="longitude" readonly />
-      <input id="key" name="key" placeholder="API KEY" readonly />
+      <input id="lat" name="latitude" placeholder="latitude" style="min-width: 200px" readonly />
+      <input id="lon" name="longitude" placeholder="longitude" style="min-width: 200px" readonly />
+      <input id="key" name="key" placeholder="API KEY" style="min-width: 200px" readonly />
 
-      <input type="number" name="radius" placeholder="radius" value="0.5" min="0" max="5" step=0.1 />
+      <input type="number" name="radius" placeholder="radius" style="min-width: 200px" value="0.5" min="0" max="5" step=0.1 />
 
       <button type="submit" class="block">SEND REQUEST</button>
     </form>
