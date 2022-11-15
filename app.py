@@ -28,7 +28,8 @@ def main_function():
         p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,))
         p.start() 
             
-        return 'we\'ve started looking'
+        return Response(open('requested.html').read())
+
 
 if __name__ == '__main__':
     app.run(debug=True)

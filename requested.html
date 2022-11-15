@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flex Flex Flex Flex Flex</title>
+  </head>
+  <body onload="init()">
+    <form method="get">
+      <p id="messages"></p>
+      <input id="key" name="key" placeholder="API KEY" />
+      <button type="submit">FIND ANOTHER CAR</button>
+    </form>
+
+    <script>
+      function init() {
+        new URL(window.location.href).searchParams.forEach((x, y) => {
+          if (y === "key") document.getElementById("key").value = x;
+        });
+      }
+    </script>
+    <style></style>
+  </body>
+</html>
