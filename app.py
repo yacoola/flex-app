@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main_function():
-    keys = {'Connor': 'o.p3eCoegV4yHnXASY6ln0eZgveLvqsF4t'}
+    keys = {'Connor': 'o.t7o0OzqvPvGBSh958BZuLtB1Zg6BVcim'}
 
     if request.method == 'GET':
         if request.args.get('key') not in keys.values():
