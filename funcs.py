@@ -40,9 +40,9 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
         message = f'There are {num_cars} cars that are {max_dis} km away'
         send_notification('Car Found', message, api_key)
     else:
-        send_notification('Car not found', 'max time has been reached and no car was found', api_key)
+        send_notification('Car not found', 'Max time has been reached and no car was found', api_key)
     
 
 def send_notification(title, message, api_key):
     pb = Pushbullet(api_key)
-    pb.push_note(title, message)
+    pb.push_note('[Flex-app] ' + title, message)
