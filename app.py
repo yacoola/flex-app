@@ -1,6 +1,5 @@
+import os
 from flask import Flask, request, Response
-import json
-import time
 from multiprocessing import Process
 
 from funcs import notify_close_cars
@@ -9,7 +8,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main_function():
-    keys = {'Connor': 'o.t7o0OzqvPvGBSh958BZuLtB1Zg6BVcim'}
+
+    # import keys from environment variables
+    keys = os.getenv('KEYS')
+    keys = dict(item.split(':') for item in keys.split(','))
 
     if request.method == 'GET':
         if request.args.get('key') not in keys.values():
