@@ -10,7 +10,7 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
     max_dis = float(max_dis)
 
     # Set initial notification 
-    send_notification('car search has started', 'The flex-notifier has begun searching for you\'re car', api_key)
+    send_notification('Car search has started', 'The flex-app has begun searching for your car', api_key)
 
     # Begin search
     num_loops = round(max_time / sleep_time)
@@ -34,7 +34,7 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
             break
 
     if num_cars==1:
-        message = f'There is {num_cars} car that is {max_dis} km away'
+        message = f'There is 1 car that is {max_dis} km away'
         send_notification('Car Found', message, api_key)
     elif num_cars>1:
         message = f'There are {num_cars} cars that are {max_dis} km away'
