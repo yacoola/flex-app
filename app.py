@@ -4,6 +4,10 @@ from multiprocessing import Process
 
 from funcs import notify_close_cars
 
+# For local testing Only:
+# from dotenv import load_dotenv
+# load_dotenv()
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
