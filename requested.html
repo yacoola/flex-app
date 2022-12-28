@@ -4,27 +4,42 @@
     <base href="/" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <title>Flex Flex Flex Flex Flex</title>
     <style>
-      .block {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 130px;
+        font-family: "Courier New", monospace;
+      }
+      button {
         display: block;
+        color: white;
         width: 100%;
         border: none;
-        background-color: #04AA6D;
+        background-color: #84bd00;
         padding: 14px 28px;
-        margin-top:10px;
+        margin-top: 20px;
         font-size: 16px;
         cursor: pointer;
         text-align: center;
+        border-radius: 5px;
       }
     </style>
   </head>
-  <h1 style="margin-top: 150px">We're looking !!</h1>
+  <h1>We're looking !!</h1>
   <body onload="init()">
     <form method="get">
       <p id="messages"></p>
-      <input id="key" type="hidden" name="key" placeholder="API KEY" style="width: 200px" />
-      <button type="submit" class="block" >FIND ANOTHER CAR</button>
+      <input
+        id="key"
+        type="hidden"
+        name="key"
+        placeholder="API KEY"
+      />
+      <button type="submit">FIND ANOTHER CAR</button>
     </form>
 
     <script>

@@ -1,6 +1,4 @@
-import os
 import requests
-from tqdm import tqdm 
 import numpy as np
 import geopy.distance
 import time
@@ -10,11 +8,11 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
     try:
         max_dis = float(max_dis)
 
-        # Set initial notification 
+        # Set initial notification
         send_notification('Car search has started', 'The flex-app has begun searching for your car', api_key)
 
         # Begin search
-        num_loops = round(max_time / sleep_time) 
+        num_loops = round(max_time / sleep_time)
 
         for i in range(num_loops):
             if i != 0:
@@ -30,7 +28,7 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
                 car_list = np.append(car_list, distance)
 
             num_cars = len(car_list[car_list < max_dis])
-            
+
             if (num_cars > 0):
                 break
 
@@ -45,8 +43,8 @@ def notify_close_cars(loc, max_dis, api_key, sleep_time=5, max_time=1800):
 
     except Exception as e:
         message = f'The search has stopped. Please try again.\n\nThe script crashed for reason:\n\t{e}'
-        send_notification('Script crashed', message, api_key)        
-    
+        send_notification('Script crashed', message, api_key)
+
 
 def send_notification(title, message, api_key):
     pb = Pushbullet(api_key)
