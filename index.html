@@ -4,32 +4,115 @@
     <base href="/" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <title>Flex Flex Flex Flex Flex</title>
     <style>
-      .block {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 130px;
+        font-family: "Courier New", monospace;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input,
+      button {
+        font-family: inherit;
+      }
+      div {
+        text-align: center;
+      }
+      input {
+        outline: none;
+        resize: vertical;
+        box-sizing: border-box;
+        max-width: 140px;
+        border: none;
+        padding: 10px 10px;
+        margin: 10px 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: all 0.4s;
+      }
+      input.editable {
+        border: 2px solid #ccc;
+        border-radius: 5px;
+      }
+      input::placeholder {
+        color: black;
+        text-transform: uppercase;
+      }
+      input.editable:focus {
+        border-color: black;
+      }
+      label {
+        color: #666;
+        margin-top: 20px;
+      }
+      button {
         display: block;
+        color: white;
         width: 100%;
         border: none;
-        background-color: #04AA6D;
+        background-color: #84bd00;
         padding: 14px 28px;
-        margin-top:10px;
+        margin-top: 20px;
         font-size: 16px;
         cursor: pointer;
         text-align: center;
-    }
+        border-radius: 5px;
+      }
     </style>
   </head>
-  <h1 style="margin-top: 150px">Find a car !!</h1>
+  <h1>Find a car !!</h1>
   <body onload="init()">
     <form method="post">
       <p id="messages"></p>
-      <input id="lat" name="latitude" placeholder="latitude" style="width: 200px" readonly />
-      <input id="lon" name="longitude" placeholder="longitude" style="width: 200px" readonly />
-      <input id="key" type="hidden" name="key" placeholder="API KEY" style="width: 200px" readonly />
+      <div>
+        <label for="lat">Latitude:</label>
+        <input
+          id="lat"
+          name="latitude"
+          placeholder="latitude"
+          readonly
+        />
+      </div>
+      <div>
+        <label for="lon">Longitude:</label>
+        <input
+          id="lon"
+          name="longitude"
+          placeholder="longitude"
+          readonly
+        />
+      </div>
+      <input
+        id="key"
+        type="hidden"
+        name="key"
+        placeholder="API KEY"
+        readonly
+      />
 
-      <input type="number" name="radius" placeholder="radius" style="width: 200px" value="0.5" min="0" max="5" step=0.1 />
+      <div>
+        <label for="radius">Search Radius:</label>
+        <input
+          type="number"
+          name="radius"
+          class="editable"
+          placeholder="radius"
+          value="0.5"
+          min="0"
+          max="5"
+          step="0.1"
+        />
+      </div>
 
-      <button type="submit" class="block">SEND REQUEST</button>
+      <button type="submit">SEND REQUEST</button>
     </form>
 
     <script>
@@ -49,6 +132,5 @@
         }
       }
     </script>
-    <style></style>
   </body>
 </html>
