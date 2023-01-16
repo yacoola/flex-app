@@ -65,7 +65,7 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
 
         if book_car_enable:
             if booking_result:
-                booking_limit_message = '[Note: The booking limit on at least one vehicle you attempted to book has been reached]' if booking_limit else ''
+                booking_limit_message = '[Note: The booking limit has been reached on at least one vehicle the app attempted to book]' if booking_limit else ''
                 message = f'''A car was booked sucessfully {booking_limit_message}'''
                 send_notification('Car booked', message, api_key)
             else:
@@ -98,7 +98,7 @@ def get_valid_session(communauto_cred):
  
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.firefox.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
 
