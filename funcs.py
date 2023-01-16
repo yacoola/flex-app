@@ -4,10 +4,7 @@ import geopy.distance
 import time
 from pushbullet import Pushbullet
 
-import os
 from playwright.sync_api import sync_playwright
-from dotenv import load_dotenv
-import ast
 import json
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, sleep_time=5, max_time=1800):
@@ -98,7 +95,7 @@ def get_valid_session(communauto_cred):
  
 
     with sync_playwright() as p:
-        browser = p.firefox.launch(headless=True)
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
 
