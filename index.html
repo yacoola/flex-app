@@ -97,6 +97,13 @@
         placeholder="API KEY"
         readonly
       />
+      <input
+        id="login_cred"
+        name="login_cred"
+        type="hidden"
+        placeholder="Login credentials"
+        readonly
+      />
 
       <div>
         <label for="radius">Search Radius:</label>
@@ -112,6 +119,17 @@
         />
       </div>
 
+      <div>
+        <label for="autobook">Automatically book:</label>
+        <input
+          type="checkbox"
+          name="autobook"
+          class="editable"
+          placeholder="autobook"
+          value="autobook"
+          checked
+        />
+      </div>
       <button type="submit">SEND REQUEST</button>
     </form>
 
@@ -119,6 +137,7 @@
       function init() {
         new URL(window.location.href).searchParams.forEach((x, y) => {
           if (y === "key") document.getElementById("key").value = x;
+          if (y === "login_cred") document.getElementById("login_cred").value = x;
         });
 
         if (navigator.geolocation) {
