@@ -5,8 +5,8 @@ from multiprocessing import Process
 from funcs import notify_close_cars
 
 # For local testing Only:
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 # Check keys when program start
 KEYS = os.getenv('KEYS')
@@ -34,11 +34,16 @@ def main_function():
         loc = [float(request.form.get('latitude')), float(request.form.get('longitude'))]
         max_dis = float(request.form.get('radius'))
         api_key = request.form.get('key')
+        login_cred = request.form.get('login_cred')
+        autobook = request.form.get('autobook')
 
-        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,))
+        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred,))
         p.start()
 
-        return Response(open('requested.html').read())
+        if login_cred=='' and autobook is not None:
+            return Response(open('requested_warn.html').read())
+        else:
+            return Response(open('requested.html').read())
 
 @app.route('/favicon.ico')
 def favicon():
