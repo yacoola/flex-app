@@ -1,15 +1,13 @@
 import os
 from flask import Flask, request, Response, send_from_directory
 from multiprocessing import Process
-import subprocess
 
 from funcs import notify_close_cars
 
 # For local testing Only:
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
-subprocess.run(["playwright", "install chromium"])
 
 # Check keys when program start
 KEYS = os.getenv('KEYS')
@@ -53,4 +51,4 @@ def favicon():
     return send_from_directory(app.root_path, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
