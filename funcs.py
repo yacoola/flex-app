@@ -66,7 +66,7 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
         if num_cars > 0:
             if book_car_enable:
                 if booking_result:
-                    booking_limit_message = '[Note: The booking limit has been reached on at least one vehicle the app attempted to book]' if booking_limit else ''
+                    booking_limit_message = '\n\n[Note: The booking limit has been reached on at least one closer vehicle the app attempted to book]' if booking_limit else ''
                     message = f'''A car was booked sucessfully {booking_limit_message}'''
                     send_notification('Car booked', message, api_key)
                 else:
