@@ -19,7 +19,11 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
         max_dis = float(max_dis)
 
         # Set initial notification
-        send_notification('Car search has started', 'The flex-app has begun searching for your car', api_key)
+        if book_car_enable:
+            send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is close', api_key)
+        else:
+            send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is booked', api_key)
+
 
         # Begin search
         num_loops = round(max_time / sleep_time)
@@ -89,7 +93,7 @@ def send_notification(title, message, api_key):
 
 
 def get_valid_session(communauto_cred):
-    USER, PASS, customer_ID = communauto_cred
+    customer_ID, USER, PASS = communauto_cred
 
     LOGIN_URL = 'https://securityservice.reservauto.net/Account/Login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DCustomerSpaceV2Client%26redirect_uri%3Dhttps%253A%252F%252Fquebec.client.reservauto.net%252Fsignin-callback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520reservautofrontofficerestapi%2520communautorestapi%2520offline_access%26state%3D822a20f902424990988f76aea1218724%26code_challenge%3DGn39oR_skXJHjIL5um3Zv1iTt8ErcK5iid9EsIJgUo8%26code_challenge_method%3DS256%26ui_locales%3Den-ca%26acr_values%3Dtenant%253A1%26response_mode%3Dquery%26branch_id%3D1&ui_locales=en-ca&BranchId=1'
  
