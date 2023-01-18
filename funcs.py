@@ -63,24 +63,24 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
                             break
                     break
 
-
-        if book_car_enable:
-            if booking_result:
-                booking_limit_message = '[Note: The booking limit has been reached on at least one vehicle the app attempted to book]' if booking_limit else ''
-                message = f'''A car was booked sucessfully {booking_limit_message}'''
-                send_notification('Car booked', message, api_key)
+        if num_cars > 0:
+            if book_car_enable:
+                if booking_result:
+                    booking_limit_message = '[Note: The booking limit has been reached on at least one vehicle the app attempted to book]' if booking_limit else ''
+                    message = f'''A car was booked sucessfully {booking_limit_message}'''
+                    send_notification('Car booked', message, api_key)
+                else:
+                    message = f'A booking was attempted but failed for the following reason: {booking_message}'
+                    send_notification('Unsucessful booking', message, api_key) 
             else:
-                message = f'A booking was attempted but failed for the following reason: {booking_message}'
-                send_notification('Unsucessful booking', message, api_key) 
+                if num_cars==1:
+                    message = f'There is 1 car that is {max_dis} km away'
+                    send_notification('Car Found', message, api_key)
+                elif num_cars>1:
+                    message = f'There are {num_cars} cars that are {max_dis} km away'
+                    send_notification('Car Found', message, api_key)
         else:
-            if num_cars==1:
-                message = f'There is 1 car that is {max_dis} km away'
-                send_notification('Car Found', message, api_key)
-            elif num_cars>1:
-                message = f'There are {num_cars} cars that are {max_dis} km away'
-                send_notification('Car Found', message, api_key)
-            else:
-                send_notification('Car not found', 'Max time has been reached and no car was found', api_key)
+            send_notification('Car not found', 'Max time has been reached and no car was found', api_key)
 
     except Exception as e:
         message = f'The search has stopped. Please try again.\n\nThe script crashed for reason:\n\t{e}'
