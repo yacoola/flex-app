@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, Response, send_from_directory
 from multiprocessing import Process
+import subprocess
 
 from funcs import notify_close_cars
 
@@ -8,6 +9,7 @@ from funcs import notify_close_cars
 from dotenv import load_dotenv
 load_dotenv()
 
+subprocess.run(["playwright", "install", "chromium"])
 
 # Check keys when program start
 KEYS = os.getenv('KEYS')
