@@ -20,9 +20,9 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
 
         # Set initial notification
         if book_car_enable:
-            send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is close', api_key)
-        else:
             send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is booked', api_key)
+        else:
+            send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is close', api_key)
 
 
         # Begin search
