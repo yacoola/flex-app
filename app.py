@@ -39,8 +39,9 @@ def main_function():
         api_key = request.form.get('key')
         login_cred = request.form.get('login_cred')
         autobook = request.form.get('autobook')
+        ethical = request.form.get('ethical')
 
-        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred,))
+        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred, ethical,))
         p.start()
 
         if login_cred=='' and autobook is not None:
