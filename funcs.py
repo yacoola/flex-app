@@ -7,7 +7,7 @@ from pushbullet import Pushbullet
 from playwright.sync_api import sync_playwright
 import json
 
-def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, sleep_time=5, max_time=1800):
+def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
     try:
         # Process inputs
         book_car_enable = True if book_car_enable is not None else False
@@ -24,6 +24,9 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
         else:
             send_notification('Car search has started', 'The flex-app has begun searching for your car, you will be notified when a car is close', api_key)
 
+        # Log in
+        if book_car_enable:
+            customer_ID, session_ID = get_valid_session(communauto_cred)
 
         # Begin search
         num_loops = round(max_time / sleep_time)
@@ -47,40 +50,45 @@ def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, s
             car_list_filtered = car_list_filtered[car_list_filtered[:,0].argsort()] 
             num_cars = car_list_filtered.shape[0]
 
+            ignore_list = []
             if (num_cars > 0):
                 if book_car_enable == False:
-                    break
-                else:
-                    booking_limit=False
-                    time.sleep(5)
-                    customer_ID, session_ID = get_valid_session(communauto_cred)
-                    for car in car_list_filtered[:,1]:
-                        booking_result, booking_message = book_car(int(car), customer_ID, session_ID)
-                        if booking_message == 'The booking limit on this vehicle has been reached.':
-                            time.sleep(1)
-                            booking_limit=True
+                    if num_cars > 0:
+                        if book_car_enable:
+                            message = f'''A car was booked sucessfully'''
+                            send_notification('Car booked', message, api_key)
                         else:
-                            break
-                    break
-
-        if num_cars > 0:
-            if book_car_enable:
-                if booking_result:
-                    booking_limit_message = '\n\n[Note: The booking limit has been reached on at least one closer vehicle the app attempted to book]' if booking_limit else ''
-                    message = f'''A car was booked sucessfully {booking_limit_message}'''
-                    send_notification('Car booked', message, api_key)
+                            if num_cars==1:
+                                message = f'There is 1 car that is {max_dis} km away'
+                                send_notification('Car Found', message, api_key)
+                            elif num_cars>1:
+                                message = f'There are {num_cars} cars that are {max_dis} km away'
+                                send_notification('Car Found', message, api_key)
+                        return
                 else:
-                    message = f'A booking was attempted but failed for the following reason: {booking_message}'
-                    send_notification('Unsucessful booking', message, api_key) 
-            else:
-                if num_cars==1:
-                    message = f'There is 1 car that is {max_dis} km away'
-                    send_notification('Car Found', message, api_key)
-                elif num_cars>1:
-                    message = f'There are {num_cars} cars that are {max_dis} km away'
-                    send_notification('Car Found', message, api_key)
-        else:
-            send_notification('Car not found', 'Max time has been reached and no car was found', api_key)
+                    if ethical_mode:
+                        time.sleep(5)
+                    for car in car_list_filtered[:,1]:
+                        if car not in ignore_list:
+                            booking_result, booking_message = book_car(int(car), customer_ID, session_ID)
+                            if booking_result:
+                                message = f'''A car was booked sucessfully'''
+                                send_notification('Car booked', message, api_key)
+                                return
+                            elif booking_message == 'The booking limit on this vehicle has been reached.':
+                                message = f'A booking was attempted but failed for the reason below. The search has is continuing.\n\n{booking_message}'
+                                send_notification('Unsucessful booking', message, api_key) 
+                                ignore_list.append(car)
+                                time.sleep(.25)
+                            elif booking_message == 'The vehicle is unavailable.':
+                                message = f'A booking was attempted but failed for the reason below. The search is continuing.\n\n{booking_message}'
+                                send_notification('Unsucessful booking', message, api_key) 
+                            else:
+                                message = f'A booking was attempted but failed for the reason below. The search has stopped.\n\n{booking_message}'
+                                send_notification('search stopped', message, api_key) 
+                                return
+
+        send_notification('Car not found', 'Max time has been reached and no car was found', api_key)
 
     except Exception as e:
         message = f'The search has stopped. Please try again.\n\nThe script crashed for reason:\n\t{e}'
