@@ -127,6 +127,18 @@
           class="editable"
           placeholder="autobook"
           value="autobook"
+          onclick="showEthical()"
+          checked
+        />
+      </div>
+      <div>
+        <label name='ethicalText' for="ethical">Ethical mode:</label>
+        <input
+          type="checkbox"
+          name="ethical"
+          class="editable"
+          placeholder="ethical"
+          value="ethical"
           checked
         />
       </div>
@@ -139,7 +151,6 @@
           if (y === "key") document.getElementById("key").value = x;
           if (y === "login_cred") document.getElementById("login_cred").value = x;
         });
-
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((pos) => {
             document.getElementById("lat").value = pos.coords.latitude;
@@ -148,6 +159,20 @@
         } else {
           document.getElementById("messages").innerHTML =
             "Geolocation is not supported by this browser.";
+        }
+      }
+      function showEthical() {
+        var checkBox = document.getElementsByName("autobook")[0];
+        var ethicalCheckBox = document.getElementsByName("ethical")[0];
+        var text = document.getElementsByName("ethicalText")[0];
+        console.log(text.style.display)
+
+        if (checkBox.checked == true){
+          ethicalCheckBox.type = "checkbox";
+          text.style.display=''
+        } else {
+          ethicalCheckBox.type = "hidden";
+          text.style.display='none'
         }
       }
     </script>
