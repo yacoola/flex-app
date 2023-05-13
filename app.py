@@ -2,6 +2,9 @@ import os
 from flask import Flask, request, Response, send_from_directory
 from multiprocessing import Process
 import subprocess
+from datetime import datetime
+import logging
+from tinydb import TinyDB, Query
 
 from funcs import notify_close_cars
 
@@ -10,6 +13,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 subprocess.run(["playwright", "install", "chromium"])
+
+db = TinyDB('request_log.json')
 
 # Check keys when program start
 KEYS = os.getenv('KEYS')
@@ -44,10 +49,15 @@ def main_function():
         p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred, ethical,))
         p.start()
 
+        current_time = datetime.now().strftime('%Y-%m-%d, %H:%M')
+        info = {'api_key': api_key, 'time_started': current_time, 'max_dis': max_dis, 'autobook': autobook, 'pid': p.pid}
+        db.insert(info)
+        
         if login_cred=='' and autobook is not None:
             return Response(open('requested_warn.html').read())
         else:
             return Response(open('requested.html').read())
+
 
 @app.route('/favicon.ico')
 def favicon():

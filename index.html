@@ -145,6 +145,19 @@
       <button type="submit">SEND REQUEST</button>
     </form>
 
+    <form method="post">
+      <p id="messages"></p>
+      <input
+        id="key"
+        type="hidden"
+        name="key"
+        placeholder="API KEY"
+        readonly
+      />
+      <button type="submit">CHECK STATUS</button>
+    </form>
+
+
     <script>
       function init() {
         new URL(window.location.href).searchParams.forEach((x, y) => {
