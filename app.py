@@ -1,4 +1,5 @@
 import os
+import random
 from flask import Flask, request, Response, send_from_directory
 from multiprocessing import Process
 import subprocess
@@ -8,8 +9,6 @@ from funcs import notify_close_cars
 # For local testing Only:
 from dotenv import load_dotenv
 load_dotenv()
-
-subprocess.run(["playwright", "install", "chromium"])
 
 # Check keys when program start
 KEYS = os.getenv('KEYS')
@@ -41,7 +40,7 @@ def main_function():
         autobook = request.form.get('autobook')
         ethical = request.form.get('ethical')
 
-        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred, ethical,))
+        p = Process(target=notify_close_cars, args=(loc, max_dis, api_key,autobook,login_cred, ethical,), name=f'{api_key}{random.randint(10000, 99999)}')
         p.start()
 
         if login_cred=='' and autobook is not None:
