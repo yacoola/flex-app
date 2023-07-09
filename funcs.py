@@ -10,8 +10,6 @@ import json
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
     try:
-
-        subprocess.run(["playwright", "install", "chromium"]) # Run in cases where playwright is not installed
         # Process inputs
         book_car_enable = True if book_car_enable is not None else False
         communauto_cred = [item for item in communauto_cred.split(',')]
