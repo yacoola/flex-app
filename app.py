@@ -10,8 +10,6 @@ from funcs import notify_close_cars
 from dotenv import load_dotenv
 load_dotenv()
 
-subprocess.run(["playwright", "install", "chromium"])
-
 # Check keys when program start
 KEYS = os.getenv('KEYS')
 if not KEYS:

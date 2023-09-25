@@ -1,12 +1,21 @@
+import os
+import json
 import requests
 import numpy as np
 import geopy.distance
 import time
 from pushbullet import Pushbullet
-import subprocess
 
-from playwright.sync_api import sync_playwright
-import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium_stealth import stealth
+
+from dotenv import load_dotenv
+load_dotenv()
+
+GOOGLE_CHROME_BIN = os.getenv('GOOGLE_CHROME_BIN')
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
     try:
@@ -101,32 +110,70 @@ def send_notification(title, message, api_key):
     pb.push_note('[Flex-app] ' + title, message)
 
 
+def wait_for_iframe(browser, max_time):
+    start_time = time.time()
+    while time.time() - start_time < max_time:
+        iframe = browser.execute_script('return document.querySelector("iframe");')
+        if iframe:
+            break
+        time.sleep(0.25)
+
 def get_valid_session(communauto_cred):
     customer_ID, USER, PASS = communauto_cred
 
     LOGIN_URL = 'https://securityservice.reservauto.net/Account/Login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DCustomerSpaceV2Client%26redirect_uri%3Dhttps%253A%252F%252Fquebec.client.reservauto.net%252Fsignin-callback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520reservautofrontofficerestapi%2520communautorestapi%2520offline_access%26state%3D822a20f902424990988f76aea1218724%26code_challenge%3DGn39oR_skXJHjIL5um3Zv1iTt8ErcK5iid9EsIJgUo8%26code_challenge_method%3DS256%26ui_locales%3Den-ca%26acr_values%3Dtenant%253A1%26response_mode%3Dquery%26branch_id%3D1&ui_locales=en-ca&BranchId=1'
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument('--incognito')
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
 
-        page.goto(LOGIN_URL)
-        page.locator('input[name="Username"]').fill(USER)
-        page.locator('input[name="Password"]').fill(PASS)
-        page.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
-        page.wait_for_load_state('networkidle')
-        page.goto('https://quebec.client.reservauto.net/bookCar')
-        page.wait_for_load_state('networkidle')
-        # directly load iframe with form to extract token
-        page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-        page.wait_for_load_state('domcontentloaded')
+    with webdriver.Chrome(options=options) as browser:
 
-        session_ID = [f"{c['name']}={c['value']}" for c in context.cookies() if c['name'] in 'mySession'][0]
+        stealth(browser,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
 
-        browser.close()
-    
-    return customer_ID, session_ID
+
+        browser.get(LOGIN_URL)
+        WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="Username"]')))
+        username = browser.find_element(By.CSS_SELECTOR, 'input[name="Username"]')
+        username.send_keys(USER)
+        password = browser.find_element(By.CSS_SELECTOR, 'input[name="Password"]')
+        password.send_keys(PASS)
+        login_button = browser.find_element(By.CSS_SELECTOR, 'button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
+        start_time = time.time()
+        while time.time() - start_time < 30:
+            try:
+                login_button.click()
+                break
+            except Exception:
+                pass
+        WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//div[text()='Contact Information']")))
+
+        browser.get('https://quebec.client.reservauto.net/bookCar')
+        start_time = time.time()
+        while time.time() - start_time < 30:
+            iframe = browser.execute_script('return document.querySelector("iframe");')
+            if iframe:
+                break
+            time.sleep(0.25)
+
+        browser.get('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
+        time.sleep(1)
+
+        cookies = browser.get_cookies()
+        session_ID = [f"{c['name']}={c['value']}" for c in cookies if c['name'] in 'mySession'][0]
+
+        browser.quit()
+
+        return customer_ID, session_ID
 
 def book_car(car_ID, customer_ID, session_ID):
 
