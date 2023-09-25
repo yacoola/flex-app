@@ -155,7 +155,8 @@ def get_valid_session(communauto_cred):
                 break
             except Exception:
                 pass
-        WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//div[text()='Contact Information']")))
+        # WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//div[text()='Contact Information']")))
+        time.sleep(2)
 
         browser.get('https://quebec.client.reservauto.net/bookCar')
         start_time = time.time()
