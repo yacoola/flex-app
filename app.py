@@ -7,14 +7,14 @@ import subprocess
 from funcs import notify_close_cars
 
 # For local testing Only:
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-# Check keys when program start
-KEYS = os.getenv('KEYS')
-if not KEYS:
-    print('Missing KEYS environment variable.')
-    os._exit(1)
+# # Check keys when program start
+# KEYS = os.getenv('KEYS')
+# if not KEYS:
+#     print('Missing KEYS environment variable.')
+#     os._exit(1)
 
 app = Flask(__name__)
 
@@ -52,5 +52,5 @@ def main_function():
 def favicon():
     return send_from_directory(app.root_path, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-if __name__ == '__main__':
-    app.run(debug=False)
+# if __name__ == '__main__':
+#     app.run(debug=False)
