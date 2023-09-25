@@ -10,11 +10,11 @@ from funcs import notify_close_cars
 # from dotenv import load_dotenv
 # load_dotenv()
 
-# # Check keys when program start
-# KEYS = os.getenv('KEYS')
-# if not KEYS:
-#     print('Missing KEYS environment variable.')
-#     os._exit(1)
+# Check keys when program start
+KEYS = os.getenv('KEYS')
+if not KEYS:
+    print('Missing KEYS environment variable.')
+    os._exit(1)
 
 app = Flask(__name__)
 
