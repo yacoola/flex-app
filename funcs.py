@@ -15,8 +15,6 @@ from selenium_stealth import stealth
 from dotenv import load_dotenv
 load_dotenv()
 
-GOOGLE_CHROME_BIN = os.getenv('GOOGLE_CHROME_BIN')
-
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
     try:
         # Process inputs
@@ -126,6 +124,8 @@ def get_valid_session(communauto_cred):
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument('--incognito')
+    options.add_argument('--no-sandbox')         
+    options.add_argument('--disable-dev-shm-usage')        
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
 
