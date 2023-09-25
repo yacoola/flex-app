@@ -7,8 +7,8 @@ import subprocess
 from funcs import notify_close_cars
 
 # For local testing Only:
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 subprocess.run(["playwright", "install", "chromium"])
 
