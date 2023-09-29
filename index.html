@@ -19,7 +19,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 130px;
+      margin-top: 30px;
       font-family: "Courier New", monospace;
       color: white;
       background-color: black;
@@ -169,7 +169,7 @@
     function initializeMap(position) {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
-      var map = L.map('map', { attributionControl: false, zoomControl: false, doubleClickZoom: false }).setView([latitude, longitude], 15);
+      var map = L.map('map', { attributionControl: false, doubleClickZoom: false }).setView([latitude, longitude], 15);
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
@@ -212,27 +212,6 @@
         circle.setRadius(e.target.value * 1000);
       });
 
-      // Add custom zoom control
-      var zoomControl = L.control.zoom({
-        position: 'topleft'
-      }).addTo(map);
-      zoomControl._zoomIn = function (e) {
-        map.zoomIn(map.options.zoomDelta * (e.shiftKey ? 3 : 1));
-      };
-
-      zoomControl._zoomOut = function (e) {
-        map.zoomOut(map.options.zoomDelta * (e.shiftKey ? 3 : 1));
-      };
-      map.getContainer().addEventListener('wheel', function (e) {
-        e.preventDefault();
-        if (e.deltaY > 0) {
-          map.zoomOut();
-        } else {
-          map.zoomIn();
-        }
-
-        return false;
-      }, { passive: false });
     }
 
     function handleLocationError(error) {
