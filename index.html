@@ -1,180 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base href="/" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <title>Flex Flex Flex Flex Flex</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 130px;
-        font-family: "Courier New", monospace;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-      }
-      input,
-      button {
-        font-family: inherit;
-      }
-      div {
-        text-align: center;
-      }
-      input {
-        outline: none;
-        resize: vertical;
-        box-sizing: border-box;
-        max-width: 140px;
-        border: none;
-        padding: 10px 10px;
-        margin: 10px 0;
-        background-color: var(--background-color);
-        color: var(--text-color);
-        font-size: 1rem;
-        transition: all 0.4s;
-      }
-      input.editable {
-        border: 2px solid #ccc;
-        border-radius: 5px;
-      }
-      input::placeholder {
-        color: black;
-        text-transform: uppercase;
-      }
-      input.editable:focus {
-        border-color: black;
-      }
-      label {
-        color: #666;
-        margin-top: 20px;
-      }
-      button {
-        display: block;
-        color: white;
-        width: 100%;
-        border: none;
-        background-color: #84bd00;
-        padding: 14px 28px;
-        margin-top: 20px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        border-radius: 5px;
-      }
-    </style>
-  </head>
-  <h1>Find a car !!</h1>
-  <body onload="init()">
-    <form method="post">
-      <p id="messages"></p>
-      <div>
-        <label for="lat">Latitude:</label>
-        <input
-          id="lat"
-          name="latitude"
-          placeholder="latitude"
-          readonly
-        />
-      </div>
-      <div>
-        <label for="lon">Longitude:</label>
-        <input
-          id="lon"
-          name="longitude"
-          placeholder="longitude"
-          readonly
-        />
-      </div>
-      <input
-        id="key"
-        type="hidden"
-        name="key"
-        placeholder="API KEY"
-        readonly
-      />
-      <input
-        id="login_cred"
-        name="login_cred"
-        type="hidden"
-        placeholder="Login credentials"
-        readonly
-      />
 
-      <div>
-        <label for="radius">Search Radius:</label>
-        <input
-          type="number"
-          name="radius"
-          class="editable"
-          placeholder="radius"
-          value="0.5"
-          min="0"
-          max="5"
-          step="0.1"
-        />
-      </div>
+<head>
+  <base href="/" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <title>Flex Flex Flex</title>
+  <style>
+    #map {
+      height: 300px;
+      width: 300px;
+      border-radius: 10px;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 130px;
+      font-family: "Courier New", monospace;
+      color: white;
+      background-color: black;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
-      <div>
-        <label for="autobook">Automatically book:</label>
-        <input
-          type="checkbox"
-          name="autobook"
-          class="editable"
-          placeholder="autobook"
-          value="autobook"
-          onclick="showEthical()"
-          checked
-        />
-      </div>
-      <div>
-        <label name='ethicalText' for="ethical">Ethical mode:</label>
-        <input
-          type="checkbox"
-          name="ethical"
-          class="editable"
-          placeholder="ethical"
-          value="ethical"
-          checked
-        />
-      </div>
-      <button type="submit">SEND REQUEST</button>
-    </form>
+    input,
+    button {
+      font-family: inherit;
+    }
 
-    <script>
-      function init() {
-        new URL(window.location.href).searchParams.forEach((x, y) => {
-          if (y === "key") document.getElementById("key").value = x;
-          if (y === "login_cred") document.getElementById("login_cred").value = x;
+    div {
+      text-align: center;
+    }
+
+    input {
+      outline: none;
+      resize: vertical;
+      box-sizing: border-box;
+      max-width: 140px;
+      border: none;
+      padding: 10px 10px;
+      margin: 10px 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: all 0.4s;
+    }
+
+    input.editable {
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input::placeholder {
+      color: black;
+      text-transform: uppercase;
+    }
+
+    input.editable:focus {
+      border-color: black;
+    }
+
+    label {
+      color: #aaaaaa;
+      margin-top: 20px;
+    }
+
+    button {
+      display: block;
+      color: white;
+      width: 100%;
+      border: none;
+      background-color: #84bd00;
+      padding: 14px 28px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<h1>Find a car !!</h1>
+<div id="map"></div>
+
+<body onload="init()">
+  <form method="post">
+    <p id="messages"></p>
+    <div>
+      <input id="lat" type="hidden" name="latitude" placeholder="latitude" readonly />
+    </div>
+    <div>
+      <input id="lon" type="hidden" name="longitude" placeholder="longitude" readonly />
+    </div>
+    <input id="key" type="hidden" name="key" placeholder="API KEY" readonly />
+    <input id="login_cred" name="login_cred" type="hidden" placeholder="Login credentials" readonly />
+    <div>
+      <label for="radius">Search Radius:</label>
+      <input id="radius" type="number" name="radius" class="editable" placeholder="radius" value="0.5" min="0" max="5"
+        step="0.1" />
+    </div>
+    <div>
+      <label for="autobook">Automatically book:</label>
+      <input type="checkbox" name="autobook" class="editable" placeholder="autobook" value="autobook"
+        onclick="showEthical()" checked />
+    </div>
+    <div>
+      <label name='ethicalText' for="ethical">Ethical mode:</label>
+      <input type="checkbox" name="ethical" class="editable" placeholder="ethical" value="ethical" checked />
+    </div>
+    <button type="submit">SEND REQUEST</button>
+  </form>
+  <br></br>
+  <!-- <div>
+    Questions? See the 
+    <a href='/docs' target="_blank">docs</a>
+  </div> -->
+  <script>
+
+    function init() {
+      new URL(window.location.href).searchParams.forEach((x, y) => {
+        if (y === "key") document.getElementById("key").value = x;
+        if (y === "login_cred") document.getElementById("login_cred").value = x;
+      });
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          document.getElementById("lat").value = pos.coords.latitude;
+          document.getElementById("lon").value = pos.coords.longitude;
         });
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((pos) => {
-            document.getElementById("lat").value = pos.coords.latitude;
-            document.getElementById("lon").value = pos.coords.longitude;
-          });
-        } else {
-          document.getElementById("messages").innerHTML =
-            "Geolocation is not supported by this browser.";
-        }
+        navigator.geolocation.getCurrentPosition(initializeMap, handleLocationError);
+      } else {
+        console.log("Geolocation is not supported by this browser.");
       }
-      function showEthical() {
-        var checkBox = document.getElementsByName("autobook")[0];
-        var ethicalCheckBox = document.getElementsByName("ethical")[0];
-        var text = document.getElementsByName("ethicalText")[0];
-        console.log(text.style.display)
+    }
 
-        if (checkBox.checked == true){
-          ethicalCheckBox.type = "checkbox";
-          text.style.display=''
-        } else {
-          ethicalCheckBox.type = "hidden";
-          text.style.display='none'
-        }
+    function showEthical() {
+      var checkBox = document.getElementsByName("autobook")[0];
+      var ethicalCheckBox = document.getElementsByName("ethical")[0];
+      var text = document.getElementsByName("ethicalText")[0];
+      console.log(text.style.display)
+
+      if (checkBox.checked == true) {
+        ethicalCheckBox.type = "checkbox";
+        text.style.display = ''
+      } else {
+        ethicalCheckBox.type = "hidden";
+        text.style.display = 'none'
       }
-    </script>
-  </body>
+    }
+
+    var num = 0;
+    function increase() {
+      num++;
+      document.getElementById("number").innerHTML = num;
+    }
+    function decrease() {
+      if (num > 0) {
+        num--;
+        document.getElementById("number").innerHTML = num;
+      }
+    }
+
+    function initializeMap(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      var map = L.map('map', { attributionControl: false, zoomControl: false, doubleClickZoom: false }).setView([latitude, longitude], 15);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+      }).addTo(map);
+
+      var marker = L.marker(map.getCenter()).addTo(map);
+      var circle = L.circle(map.getCenter(), { radius: 500 }).addTo(map);
+
+      map.on('move', function () {
+        marker.setLatLng(map.getCenter());
+        center = map.getCenter();
+        circle.setLatLng(center);
+        document.getElementById("lat").value = center.lat;
+        document.getElementById("lon").value = center.lng;
+      });
+
+      var locationControl = L.control({ position: 'bottomright' });
+
+      locationControl.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        div.style.backgroundColor = 'white';
+        div.style.backgroundImage = 'url(/mylocation.png)';
+        div.style.backgroundSize = '30px 30px';
+        div.style.width = '30px';
+        div.style.height = '30px';
+        div.onclick = function () {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var zoom = map.getZoom();
+            map.setView([latitude, longitude], zoom);
+          }, handleLocationError);
+        }
+        return div;
+      };
+
+      locationControl.addTo(map);
+
+      document.getElementById('radius').addEventListener('input', function (e) {
+        circle.setRadius(e.target.value * 1000);
+      });
+
+      // Add custom zoom control
+      var zoomControl = L.control.zoom({
+        position: 'topleft'
+      }).addTo(map);
+      zoomControl._zoomIn = function (e) {
+        map.zoomIn(map.options.zoomDelta * (e.shiftKey ? 3 : 1));
+      };
+
+      zoomControl._zoomOut = function (e) {
+        map.zoomOut(map.options.zoomDelta * (e.shiftKey ? 3 : 1));
+      };
+      map.getContainer().addEventListener('wheel', function (e) {
+        e.preventDefault();
+        if (e.deltaY > 0) {
+          map.zoomOut();
+        } else {
+          map.zoomIn();
+        }
+
+        return false;
+      }, { passive: false });
+    }
+
+    function handleLocationError(error) {
+      console.warn(`ERROR(${error.code}): ${error.message}`);
+    }
+
+
+  </script>
+</body>
+
 </html>
