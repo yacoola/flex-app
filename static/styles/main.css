@@ -1,0 +1,74 @@
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      font-family: "Courier New", monospace;
+      color: white;
+      background-color: black;
+    }
+    p {
+      max-width: 300px;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input,
+    button {
+      font-family: inherit;
+    }
+
+    div {
+      text-align: center;
+    }
+
+    input {
+      outline: none;
+      resize: vertical;
+      box-sizing: border-box;
+      max-width: 140px;
+      border: none;
+      padding: 10px 10px;
+      margin: 10px 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: all 0.4s;
+    }
+
+    input.editable {
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input::placeholder {
+      color: black;
+      text-transform: uppercase;
+    }
+
+    input.editable:focus {
+      border-color: black;
+    }
+
+    label {
+      color: #aaaaaa;
+      margin-top: 20px;
+    }
+
+    button {
+      display: block;
+      color: white;
+      width: 100%;
+      border: none;
+      background-color: #84bd00;
+      padding: 14px 28px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+    }

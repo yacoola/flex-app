@@ -1,14 +1,14 @@
 import os
 import random
-from flask import Flask, request, Response, send_from_directory
+from flask import Flask, request, Response, send_from_directory, render_template
 from multiprocessing import Process
 import subprocess
 
-from funcs import notify_close_cars
+from bookingfuncs import notify_close_cars
 
 # For local testing Only:
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 subprocess.run(["playwright", "install", "chromium"])
 
@@ -29,7 +29,7 @@ def main_function():
         if request.args.get('key') not in keys.values():
             return 'API key is needed'
 
-        return Response(open('index.html').read())
+        return render_template('index.html') 
 
     if request.method == 'POST':
         if request.args.get('key') not in keys.values():
@@ -46,17 +46,17 @@ def main_function():
         p.start()
 
         if login_cred=='' and autobook is not None:
-            return Response(open('requested_warn.html').read())
+            return render_template('requested.html', warn=True) 
         else:
-            return Response(open('requested.html').read())
+            return render_template('requested.html', warn=False) 
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(app.root_path, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(app.root_path, 'static/images/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/mylocation.png')
 def mylocation():
-    return send_from_directory(app.root_path, 'mylocation.png', mimetype='image/png')
+    return send_from_directory(app.root_path, 'static/images/mylocation.png', mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(debug=False)
