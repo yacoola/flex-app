@@ -54,5 +54,9 @@ def main_function():
 def favicon():
     return send_from_directory(app.root_path, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/mylocation.png')
+def mylocation():
+    return send_from_directory(app.root_path, 'mylocation.png', mimetype='image/png')
+
 if __name__ == '__main__':
     app.run(debug=False)
