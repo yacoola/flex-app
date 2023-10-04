@@ -50,6 +50,10 @@ def main_function():
         else:
             return render_template('requested.html', warn=False) 
 
+@app.route('/docs')
+def docs():
+    return render_template('docs.html') 
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(app.root_path, 'static/images/favicon.ico', mimetype='image/vnd.microsoft.icon')
