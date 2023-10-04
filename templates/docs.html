@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      background-color: #0D1117;
+      color: #C9D1D9;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: white;
+      font-family: "Courier New", monospace;
+      text-decoration: underline;
+      text-underline-offset: 0.1em;
+      text-decoration-thickness: 0.1em;
+    }
+
+    a {
+      color: #58A6FF;
+    }
+
+    pre {
+      background-color: #161B22;
+      color: #C9D1D9;
+      padding: 0.5em;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #C9D1D9 transparent;
+    }
+
+    /* For Webkit browsers like Chrome and Safari */
+    pre::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    pre::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    pre::-webkit-scrollbar-thumb {
+      background-color: #C9D1D9;
+      border-radius: 20px;
+      border: transparent;
+    }
+
+    #exampleimg {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 400px;
+      width: 100%;
+      height: auto;
+    }
+
+    #CustIDimg {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome to the flex app !!</h1>
+
+    <p>Welcome! When your all set up, this is the interface you'll see. You can use this app to get a notification when
+      a car is available, or even automatically book flex cars. Just choose a location on the map, adjust the search
+      radius,
+      and request a car.</p>
+
+    <img id=exampleimg src="/static/images/interfaceExample.png" alt="">
+
+    <p>Selecting automatic book will, of course, automatically book the car. When you choose ethical mode, the flex-app
+      will wait 5 seconds before pouncing on a car. This lets the humans compete but means you might miss the car.</p>
+
+    <p>Once the search has started, it will run for half an hour. When autobook is off, you will get a notification as
+      soon as it finds a car, and the search will stop. When autobook is on, when the Flex app finds a car, it will
+      attempt to book it for you, and you will be notified when a vehicle is booked. If the Flex app finds a car but
+      cannot book it fast enough, you will get a notification, and the system will continue to search. If the flex epp
+      encounters a problem, you will get a notification, and the search will stop. At the end of 30 minutes, if it
+      cannot find you a car, you will get a notification saying no car was found.</p>
+
+
+
+
+
+
+
+    <h2>How to setup</h2>
+    <h3>Step 1 - Get the pushbullet app on your phone</h3>
+
+    <p>The pushbullet app is used to get notifications on your phone. This will be used to notify you when a car is
+      available, booked, or when there is an issue with your request.</p>
+    <ul>
+      <li>Go to the <a href="https://www.pushbullet.com/">pushbullet website</a> and create an account. You should also
+        download the pushbullet app on your phone.</li>
+      <li>Once logged in on the website. Go to settings > account and click "create access token"</li>
+      <li>Copy the access token and send it to me, and I will add you as an approved user of the website.</li>
+      <li>Once approved. you can access the flex-app website using the following url </li>
+    </ul>
+
+    <pre>flexflexflex.onrender.com/?key=<"You're access token goes here"></pre>
+
+    <p>for example:</p>
+
+    <pre>flexflexflex.onrender.com/?key=o.vLKjkfevjeKLVjewonVLKJefwlkvVjs</pre>
+
+    <p>Don't forget to log in to pushbullet on your phone. You can use the website to get notifications of available
+      cars, but you need to do the next steps to enable automatic booking.</p>
+
+
+    <h3>Step 2 - Setup auto login</h3>
+
+    <p>To auto login you need three pieces of information.</p>
+    <ul>
+      <li>Email</li>
+      <li>Password</li>
+      <li>Customer ID</li>
+    </ul>
+
+    <p>Email and password are easy; the following is the instructions to get customer ID. You can use any browser but
+      these instructions were made for chrome </p>
+
+    <ul>
+      <li>Navigate to the <a href="https://montreal.communauto.com/?lang=en">Communauto</a> website and log in to your
+        account.</li>
+      <li>Locate and click on the “Reserve” button, identifiable by a magnifying glass icon at the top center of the
+        page.
+      </li>
+      <li>Proceed by clicking on the “Show Map” button.</li>
+      <li>To access the website’s code, right-click anywhere on the page and select “Inspect” from the dropdown menu.
+        The
+        following panel will appear.</li>
+    </ul>
+
+    <img id=CustIDimg src="/static/images/customerIDdocs.png" alt="">
+
+    <ul>
+      <li>Navigate to and click on the “Network” tab (1).</li>
+      <li>With the panel open, proceed to book a Flex car by selecting one on the map. Note that there will be activity
+        in
+        the panel; this is expected behavior.</li>
+      <li>In the search bar within the panel (2), input “CreateBooking?callback=” and press enter.</li>
+      <li>Upon completion of the search, there should be a single result displayed in the list (3). Click on this result
+        to
+        proceed.</li>
+      <li>A new pane will appear upon clicking the result. Within this pane, locate and click on the “Payload” tab (4).
+      </li>
+      <li>Record the CustomerID number (5).</li>
+    </ul>
+
+
+    <h3>Step 3 - access the website</h3>
+
+    <p>Now that you have all the info you need, you can access the website by constructing the link below. Replace all
+      the information with the
+      info you recorded in the steps above. Don't include the <>. </p>
+
+    <pre>https://flexflexflex.onrender.com/?key=&lt;your pushbullet API key&gt;&amp;login_cred=&lt;customer ID&gt;,&lt;your.email@mail.com&gt;,&lt;your password&gt;</pre>
+
+    <p>Bookmark the website and you can use it whenever you need it. You can also create a bookmark shortcut on the
+      home screen of your phone. </p>
+  </div>
+</body>
+
+</html>
