@@ -12,8 +12,7 @@ When you're all set up, this is the interface you'll see. You can use this app t
 
 Available: [flexflexflex.connbrack.com]()
 
-
-[flexflexflex.connbrack.com/docs](https://flexflexflex.connbrack.com/docs)
+Note, cannot be accessed without a registered API key. For more information see the docs: [flexflexflex.connbrack.com/docs](https://flexflexflex.connbrack.com/docs)
 
 Contact me for access.
 
