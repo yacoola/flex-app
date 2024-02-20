@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flex Flex Flex Flex Flex</title>
+    <style>
+      .block {
+        display: block;
+        width: 100%;
+        border: none;
+        background-color: #04AA6D;
+        padding: 14px 28px;
+        margin-top:10px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <h1 style="margin-top: 150px">We're looking !!</h1>
+  <body onload="init()">
+    <form method="get">
+      <p id="messages"></p>
+      <input id="key" type="hidden" name="key" placeholder="API KEY" style="width: 200px" />
+      <button type="submit" class="block" >FIND ANOTHER CAR</button>
+    </form>
+
+    <script>
+      function init() {
+        new URL(window.location.href).searchParams.forEach((x, y) => {
+          if (y === "key") document.getElementById("key").value = x;
+        });
+      }
+    </script>
+    <style></style>
+  </body>
+</html>
