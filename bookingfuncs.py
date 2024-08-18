@@ -6,6 +6,7 @@ from pushbullet import Pushbullet
 import subprocess
 
 from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
 import json
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
@@ -109,6 +110,7 @@ def get_valid_session(communauto_cred):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True) # browser in headful mode (not headless) can help bypass the CAPTCHA. Cloudflare might challenge headless browsers more aggressively.
         context = browser.new_context()
+        stealth_sync(context)  # Apply stealth mode
         page = context.new_page()
 
         page.goto(LOGIN_URL)
