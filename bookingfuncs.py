@@ -113,6 +113,7 @@ def get_valid_session(communauto_cred):
         page = context.new_page()
 
         page.goto(LOGIN_URL)
+        page.wait_for_load_state('networkidle')
         page.locator('input[name="Username"]').fill(USER)
         page.locator('input[name="Password"]').fill(PASS)
         page.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
