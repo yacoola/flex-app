@@ -35,7 +35,21 @@ def main_function():
         if request.args.get('key') not in keys.values():
             return 'API key is needed'
 
-        loc = [float(request.form.get('latitude')), float(request.form.get('longitude'))]
+        # loc = [float(request.form.get('latitude')), float(request.form.get('longitude'))]
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+        
+        # Check if the values are present and can be converted to float
+        if latitude and longitude:
+            try:
+                loc = [float(latitude), float(longitude)]
+            except ValueError:
+                return "Invalid coordinates", 400  # Handle the error appropriately
+        else:
+            return "Missing latitude or longitude", 400  # Handle the case where values are missing
+
+
+        
         max_dis = float(request.form.get('radius'))
         api_key = request.form.get('key')
         login_cred = request.form.get('login_cred')
