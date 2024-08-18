@@ -6,7 +6,7 @@ from pushbullet import Pushbullet
 import subprocess
 
 from playwright.sync_api import sync_playwright
-#from playwright_stealth import stealth_sync
+from playwright_stealth import stealth_sync
 import json
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
@@ -111,6 +111,7 @@ def get_valid_session(communauto_cred):
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
+        stealth_sync(page)
 
         page.goto(LOGIN_URL)
         page.wait_for_load_state('networkidle')
