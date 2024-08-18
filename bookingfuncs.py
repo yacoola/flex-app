@@ -112,7 +112,6 @@ def get_valid_session(communauto_cred):
         context = browser.new_context()
         page = context.new_page()
         stealth_sync(page)
-
         page.goto(LOGIN_URL)
         page.locator('input[name="Username"]').fill(USER)
         page.locator('input[name="Password"]').fill(PASS)
