@@ -110,17 +110,15 @@ def get_valid_session(communauto_cred):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
-        #stealth_sync(context)  # Apply stealth mode
         page = context.new_page()
 
         page.goto(LOGIN_URL)
-        page.wait_for_selector('input[name="Username"]')
         page.locator('input[name="Username"]').fill(USER)
         page.locator('input[name="Password"]').fill(PASS)
         page.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
-        page.wait_for_load_state()
+        page.wait_for_load_state('networkidle')
         page.goto('https://quebec.client.reservauto.net/bookCar')
-        page.wait_for_load_state()
+        page.wait_for_load_state('networkidle')
         # directly load iframe with form to extract token
         page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
         page.wait_for_load_state('domcontentloaded')
