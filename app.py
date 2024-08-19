@@ -48,7 +48,7 @@ def main_function():
         else:
             return "Missing latitude or longitude", 400  # Handle the case where values are missing
 
-       print(latitude, longitude)
+        print(latitude, longitude)
         
         max_dis = float(request.form.get('radius'))
         api_key = request.form.get('key')
