@@ -106,34 +106,28 @@ def get_valid_session(communauto_cred):
 
     LOGIN_URL = 'https://securityservice.reservauto.net/Account/Login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DCustomerSpaceV2Client%26redirect_uri%3Dhttps%253A%252F%252Fquebec.client.reservauto.net%252Fsignin-callback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520reservautofrontofficerestapi%2520communautorestapi%2520offline_access%26state%3D822a20f902424990988f76aea1218724%26code_challenge%3DGn39oR_skXJHjIL5um3Zv1iTt8ErcK5iid9EsIJgUo8%26code_challenge_method%3DS256%26ui_locales%3Den-ca%26acr_values%3Dtenant%253A1%26response_mode%3Dquery%26branch_id%3D1&ui_locales=en-ca&BranchId=1'
 
-    with SB(uc=True, headless=True) as sb:
-        # Open the login page
-        sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=12)
-        sb.sleep(1)
-        if not sb.is_text_visible("Log in", "h1"):
-            sb.get_new_driver(undetectable=True)
-            sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=12)
-            sb.sleep(1)
-
-        # Fill in the login form
-        sb.type('input[name="Username"]', USER)
-        sb.type('input[name="Password"]', PASS)
-        sb.uc_click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
-
-        # Wait for the page to load completely
-        sb.wait_for_ready_state_complete()
-
-        # Navigate to the booking page
-        sb.get('https://quebec.client.reservauto.net/bookCar')
-        sb.wait_for_ready_state_complete()
-
-        # Load the iframe form directly to extract the token
-        sb.get('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-        sb.wait_for_ready_state_complete()
-
-        # Extract the session ID from the cookies
-        cookies = sb.get_cookies()
-        session_ID = [f"{c['name']}={c['value']}" for c in cookies if c['name'] in 'mySession'][0]
+    with SB(uc=True, headless=False) as sb:
+            # Open the login page
+            sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=5)
+            sb.uc_gui_click_captcha()
+            sb.sleep(0.25)
+            sb.type('input[name="Username"]', USER)
+            sb.sleep(0.25)
+            sb.type('input[name="Password"]', PASS)
+            sb.uc_click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
+            # Wait for the page to load completely
+            sb.wait_for_ready_state_complete()
+            # Navigate to the booking page
+            sb.get('https://quebec.client.reservauto.net/bookCar')
+            sb.wait_for_ready_state_complete()
+    
+            # Load the iframe form directly to extract the token
+            sb.get('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
+            sb.wait_for_ready_state_complete()
+    
+            # Extract the session ID from the cookies
+            cookies = sb.get_cookies()
+            session_ID = [f"{c['name']}={c['value']}" for c in cookies if c['name'] in 'mySession'][0]
 
     return customer_ID, session_ID
 
