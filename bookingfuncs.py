@@ -119,7 +119,7 @@ def get_valid_session(communauto_cred):
         # Fill in the login form
         sb.type('input[name="Username"]', USER)
         sb.type('input[name="Password"]', PASS)
-        sb.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
+        sb.uc_click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
 
         # Wait for the page to load completely
         sb.wait_for_ready_state_complete()
