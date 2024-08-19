@@ -110,6 +110,12 @@ def get_valid_session(communauto_cred):
         # Open the login page
         sb.open(LOGIN_URL)
 
+        sb.sleep(1)
+        if not sb.is_text_visible("Log in", "h1"):
+            sb.get_new_driver(undetectable=True)
+            sb.open(LOGIN_URL)
+            sb.sleep(1)
+
         # Fill in the login form
         sb.type('input[name="Username"]', USER)
         sb.type('input[name="Password"]', PASS)
