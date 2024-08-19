@@ -108,12 +108,12 @@ def get_valid_session(communauto_cred):
 
     with SB(uc=True, headless=True) as sb:
         # Open the login page
-        sb.open(LOGIN_URL)
+        sb.get(LOGIN_URL)
 
         sb.sleep(1)
         if not sb.is_text_visible("Log in", "h1"):
             sb.get_new_driver(undetectable=True)
-            sb.open(LOGIN_URL)
+            sb.get(LOGIN_URL)
             sb.sleep(1)
 
         # Fill in the login form
@@ -125,11 +125,11 @@ def get_valid_session(communauto_cred):
         sb.wait_for_ready_state_complete()
 
         # Navigate to the booking page
-        sb.open('https://quebec.client.reservauto.net/bookCar')
+        sb.get('https://quebec.client.reservauto.net/bookCar')
         sb.wait_for_ready_state_complete()
 
         # Load the iframe form directly to extract the token
-        sb.open('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
+        sb.get('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
         sb.wait_for_ready_state_complete()
 
         # Extract the session ID from the cookies
