@@ -5,8 +5,7 @@ import time
 from pushbullet import Pushbullet
 import subprocess
 
-from playwright.sync_api import sync_playwright
-from playwright_stealth import stealth_sync
+from seleniumbase import SB
 import json
 
 def notify_close_cars(loc, max_dis, api_key, book_car_enable, communauto_cred, ethical_mode, sleep_time=5, max_time=1800):
@@ -107,26 +106,30 @@ def get_valid_session(communauto_cred):
 
     LOGIN_URL = 'https://securityservice.reservauto.net/Account/Login?returnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DCustomerSpaceV2Client%26redirect_uri%3Dhttps%253A%252F%252Fquebec.client.reservauto.net%252Fsignin-callback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520reservautofrontofficerestapi%2520communautorestapi%2520offline_access%26state%3D822a20f902424990988f76aea1218724%26code_challenge%3DGn39oR_skXJHjIL5um3Zv1iTt8ErcK5iid9EsIJgUo8%26code_challenge_method%3DS256%26ui_locales%3Den-ca%26acr_values%3Dtenant%253A1%26response_mode%3Dquery%26branch_id%3D1&ui_locales=en-ca&BranchId=1'
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
-        stealth_sync(page)
-        page.goto(LOGIN_URL)
-        page.locator('input[name="Username"]').fill(USER)
-        page.locator('input[name="Password"]').fill(PASS)
-        page.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
-        page.wait_for_load_state('networkidle')
-        page.goto('https://quebec.client.reservauto.net/bookCar')
-        page.wait_for_load_state('networkidle')
-        # directly load iframe with form to extract token
-        page.goto('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
-        page.wait_for_load_state('domcontentloaded')
+    with SB(uc=True, headless=True) as sb:
+        # Open the login page
+        sb.open(LOGIN_URL)
 
-        session_ID = [f"{c['name']}={c['value']}" for c in context.cookies() if c['name'] in 'mySession'][0]
+        # Fill in the login form
+        sb.type('input[name="Username"]', USER)
+        sb.type('input[name="Password"]', PASS)
+        sb.click('button.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary')
 
-        browser.close()
-    
+        # Wait for the page to load completely
+        sb.wait_for_ready_state_complete()
+
+        # Navigate to the booking page
+        sb.open('https://quebec.client.reservauto.net/bookCar')
+        sb.wait_for_ready_state_complete()
+
+        # Load the iframe form directly to extract the token
+        sb.open('https://www.reservauto.net/Scripts/Client/ReservationAdd.asp?ReactIframe=true&CurrentLanguageID=2')
+        sb.wait_for_ready_state_complete()
+
+        # Extract the session ID from the cookies
+        cookies = sb.get_cookies()
+        session_ID = [f"{c['name']}={c['value']}" for c in cookies if c['name'] in 'mySession'][0]
+
     return customer_ID, session_ID
 
 def book_car(car_ID, customer_ID, session_ID):
