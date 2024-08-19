@@ -108,12 +108,11 @@ def get_valid_session(communauto_cred):
 
     with SB(uc=True, headless=True) as sb:
         # Open the login page
-        sb.get(LOGIN_URL)
-
+        sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=12)
         sb.sleep(1)
         if not sb.is_text_visible("Log in", "h1"):
             sb.get_new_driver(undetectable=True)
-            sb.get(LOGIN_URL)
+            sb.uc_open_with_reconnect(LOGIN_URL, reconnect_time=12)
             sb.sleep(1)
 
         # Fill in the login form
